@@ -1,6 +1,4 @@
-import 'dart:ui';
-
-import 'package:cepessappv1/screens/main/main_screen.dart';
+import 'package:cepess/screens/main/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 

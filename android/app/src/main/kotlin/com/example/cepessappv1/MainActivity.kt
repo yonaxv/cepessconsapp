@@ -1,4 +1,4 @@
-package com.example.cepessappv1
+package bo.edu.institutocepess.cepess
 
 import io.flutter.embedding.android.FlutterActivity
 
