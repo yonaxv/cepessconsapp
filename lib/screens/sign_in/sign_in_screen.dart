@@ -1,9 +1,39 @@
 import 'dart:ui';
 
+import 'package:cepessappv1/screens/main/main_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class SignInScreen extends StatelessWidget {
+class SignInScreen extends StatefulWidget {
+  const SignInScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SignInScreen> createState() => _SignInScreenState();
+}
+
+_launchWhatsapp() async {
+  var url = Uri.parse(
+    "https://wa.me/59177691656",
+  );
+  await launchUrl(url, mode: LaunchMode.externalApplication);
+}
+
+_launchWebsite() async {
+  var url = Uri.parse("https://institutocepess.edu.bo/");
+  await launchUrl(url, mode: LaunchMode.externalApplication);
+}
+
+launchPlatataformaVirtual() async {
+  var url = Uri.parse("https://aulavirtual.institutocepess.edu.bo/");
+  await launchUrl(url, mode: LaunchMode.externalApplication);
+}
+
+_launchFacebookApp() async {
+  var url = Uri.parse("https://www.facebook.com/cepess");
+  await launchUrl(url, mode: LaunchMode.externalApplication);
+}
+
+class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -11,7 +41,7 @@ class SignInScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Container(
             width: double.infinity,
-            padding: EdgeInsets.only(top: 120),
+            padding: const EdgeInsets.only(top: 80),
             child: Column(
               children: [
                 Image.asset(
@@ -21,16 +51,16 @@ class SignInScreen extends StatelessWidget {
                 ),
                 Container(
                   width: double.infinity,
-                  padding: EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
                   child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         TextFormField(
                           keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                               icon: Icon(Icons.numbers),
                               labelText: 'Codigo de Estudiante',
                               border: OutlineInputBorder(
@@ -39,29 +69,79 @@ class SignInScreen extends StatelessWidget {
                               isDense: false,
                               contentPadding: EdgeInsets.all(10)),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         TextFormField(
                           keyboardType: TextInputType.text,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                               icon: Icon(Icons.password),
+                              labelText: 'Nro de Celular',
                               border: OutlineInputBorder(
                                   borderSide:
                                       BorderSide(color: Colors.black87)),
                               isDense: false,
                               contentPadding: EdgeInsets.all(10)),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
-                        TextButton(
-                          style: ButtonStyle(
-                            foregroundColor:
-                                MaterialStateProperty.all<Color>(Colors.blue),
-                          ),
-                          onPressed: () {},
-                          child: Text('TextButton'),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                                  foregroundColor:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                  backgroundColor: Colors.black87
+                                  // Theme.of(context).colorScheme.primary,
+                                  )
+                              .copyWith(
+                                  elevation: ButtonStyleButton.allOrNull(0.0)),
+                          onPressed: () => {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const MainScreen()))
+                          },
+                          child: const Text('Iniciar Sesion'),
+                        ),
+                        const SizedBox(
+                          height: 70,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              icon: Icon(
+                                Icons.facebook,
+                                size: 35,
+                              ),
+                              color: Colors.blue,
+                              onPressed: _launchFacebookApp,
+                            ),
+                            SizedBox(width: 15),
+                            IconButton(
+                              icon: Icon(Icons.web,
+                                  size: 35, color: Colors.lightBlue),
+                              onPressed: _launchWebsite,
+                            ),
+                            SizedBox(width: 15),
+                            IconButton(
+                              icon: Icon(
+                                Icons.local_library_outlined,
+                                size: 35,
+                                color: Colors.black54,
+                              ),
+                              onPressed: launchPlatataformaVirtual,
+                            ),
+                            SizedBox(width: 15),
+                            IconButton(
+                              icon: Icon(
+                                Icons.whatsapp,
+                                size: 35,
+                                color: Colors.green,
+                              ),
+                              onPressed: _launchWhatsapp,
+                            ),
+                          ],
                         )
                       ]),
                 )
