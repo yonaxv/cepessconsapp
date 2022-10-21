@@ -1,6 +1,8 @@
 import 'package:cepess/screens/consulta_notas/cons_notas.dart';
 import 'package:cepess/screens/main/main_screen.dart';
+import 'package:cepess/screens/sign_in/sign_in_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Menu extends StatefulWidget {
   const Menu({Key? key}) : super(key: key);
@@ -10,6 +12,10 @@ class Menu extends StatefulWidget {
 }
 
 class _MenuState extends State<Menu> {
+  String? _nombre = "Hola";
+  String? _estado = "Hola";
+  Color? _StatusColor = Colors.black;
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -32,7 +38,7 @@ class _MenuState extends State<Menu> {
               const SizedBox(
                 height: 20,
               ),
-              Text('Apaza Blanco Hoover Jonatan'),
+              Text('$_nombre'),
               const SizedBox(
                 height: 10,
               ),
@@ -41,13 +47,13 @@ class _MenuState extends State<Menu> {
                 children: [
                   Icon(
                     Icons.circle,
-                    color: Colors.green,
+                    color: _StatusColor,
                     size: 10,
                   ),
                   const SizedBox(
                     width: 5,
                   ),
-                  Text('Activo')
+                  Text('$_estado')
                 ],
               ),
               Divider(
@@ -67,7 +73,7 @@ class _MenuState extends State<Menu> {
               buildMenuItem(
                   text: 'Cerrar Sesion',
                   icon: Icons.logout,
-                  onClicked: () => selectedItem(context, 0))
+                  onClicked: () => selectedItem(context, 99))
             ]),
           ),
         ],
@@ -94,6 +100,10 @@ void selectedItem(BuildContext context, int index) {
     case 1:
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => ConsNotas()));
+      break;
+    case 99:
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => SignInScreen()));
       break;
   }
 }

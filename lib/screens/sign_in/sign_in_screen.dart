@@ -1,6 +1,13 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'dart:convert';
+import 'dart:ffi';
+
 import 'package:cepess/screens/main/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -32,6 +39,8 @@ _launchFacebookApp() async {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  var codController = TextEditingController();
+  var nroController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,6 +66,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           height: 20,
                         ),
                         TextFormField(
+                          controller: codController,
                           keyboardType: TextInputType.number,
                           decoration: const InputDecoration(
                               icon: Icon(Icons.numbers),
@@ -71,6 +81,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           height: 20,
                         ),
                         TextFormField(
+                          controller: nroController,
                           keyboardType: TextInputType.text,
                           decoration: const InputDecoration(
                               icon: Icon(Icons.password),
@@ -93,12 +104,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                   )
                               .copyWith(
                                   elevation: ButtonStyleButton.allOrNull(0.0)),
-                          onPressed: () => {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const MainScreen()))
-                          },
+                          onPressed: () => {login()},
                           child: const Text('Iniciar Sesion'),
                         ),
                         const SizedBox(
@@ -150,4 +156,38 @@ class _SignInScreenState extends State<SignInScreen> {
       ),
     );
   }
+
+  Future<void> login() async {
+    final url = Uri.parse("https://appcepesscons.herokuapp.com/api/auth/login");
+    if (nroController.text.isNotEmpty && codController.text.isNotEmpty) {
+      var response = await http.post(url,
+          body: ({'codigo': codController.text, 'nro': nroController.text}));
+      Map<String, dynamic> data = jsonDecode(response.body);
+
+      if (response.statusCode == 401) {
+        String msgerr = data['msg'].toString();
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(msgerr)));
+      } else if (response.statusCode == 200) {
+        print(response.body);
+        String token = data['token'].toString();
+        String nombre =
+            data['nombre'].toString() + ' ' + data['apellidos'].toString();
+        String estado = data['estado'].toString();
+        _saveValue(token, nombre, estado);
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => MainScreen()));
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Debe llenar todos los campos")));
+    }
+  }
+}
+
+_saveValue(String token, String nombre, String estado) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('token', token);
+  await prefs.setString('nombre', nombre);
+  await prefs.setString('estado', estado);
 }

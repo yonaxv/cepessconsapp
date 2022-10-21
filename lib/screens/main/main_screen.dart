@@ -9,6 +9,14 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,6 +37,17 @@ class _MainScreenState extends State<MainScreen> {
         }),
       ),
       drawer: Menu(),
+      body: Center(
+          child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Texto'),
+          Text('$_counter'),
+          TextButton(
+              onPressed: _incrementCounter, child: Text('Press to Increment'))
+        ],
+      )),
     );
   }
 }
