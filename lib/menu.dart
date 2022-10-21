@@ -2,7 +2,7 @@ import 'package:cepess/screens/consulta_notas/cons_notas.dart';
 import 'package:cepess/screens/main/main_screen.dart';
 import 'package:cepess/screens/sign_in/sign_in_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Menu extends StatefulWidget {
   const Menu({Key? key}) : super(key: key);
@@ -12,9 +12,34 @@ class Menu extends StatefulWidget {
 }
 
 class _MenuState extends State<Menu> {
-  String? _nombre = "Hola";
-  String? _estado = "Hola";
-  Color? _StatusColor = Colors.black;
+  String _nombre = "Hola";
+  String _estado = "Hola";
+  Color _StatusColor = Colors.black;
+  final storage = new FlutterSecureStorage();
+  void getData() async {
+    final name =
+        await storage.read(key: 'nombre').then((value) => value.toString());
+    final estado =
+        await storage.read(key: 'estado').then(((value) => value.toString()));
+    Color colorStatus = Colors.black;
+    if (estado == 'Activo') {
+      colorStatus = Colors.green;
+    } else {
+      colorStatus = Colors.black;
+    }
+    setState(() {
+      _nombre = name;
+      _estado = estado;
+      _StatusColor = colorStatus;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getData();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -186,8 +187,8 @@ class _SignInScreenState extends State<SignInScreen> {
 }
 
 _saveValue(String token, String nombre, String estado) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setString('token', token);
-  await prefs.setString('nombre', nombre);
-  await prefs.setString('estado', estado);
+  final storage = new FlutterSecureStorage();
+  await storage.write(key: 'token', value: token);
+  await storage.write(key: 'nombre', value: nombre);
+  await storage.write(key: 'estado', value: estado);
 }
