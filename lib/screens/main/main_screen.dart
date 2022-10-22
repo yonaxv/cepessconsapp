@@ -21,7 +21,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bienvenido!'),
+        title: Text('Instituto Tecnico cepess'),
         automaticallyImplyLeading: false,
         backgroundColor: Colors.black26,
         leading: Builder(builder: (BuildContext context) {
@@ -38,16 +38,8 @@ class _MainScreenState extends State<MainScreen> {
       ),
       drawer: Menu(),
       body: Center(
-          child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('Texto'),
-          Text('$_counter'),
-          TextButton(
-              onPressed: _incrementCounter, child: Text('Press to Increment'))
-        ],
-      )),
+        child: Text('No hay Avisos para mostrar'),
+      ),
     );
   }
 }
